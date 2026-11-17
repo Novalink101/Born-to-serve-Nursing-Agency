@@ -151,7 +151,6 @@
     </div>
 
     <script type="module">
-        // Firebase Imports
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
         import { getFirestore, collection, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
@@ -182,7 +181,7 @@
         // Handle Google Login
         googleLoginBtn.addEventListener('click', async () => {
             loginError.innerText = "";
-            googleLoginBtn.innerText = "Opening Google...";
+            googleLoginBtn.innerHTML = "Opening Google...";
             
             try {
                 await signInWithPopup(auth, provider);
@@ -197,9 +196,14 @@
             signOut(auth);
         });
 
-        // Check Auth State
+        // Check Auth State (Now accepts both emails)
         onAuthStateChanged(auth, (user) => {
-            if (user && user.email === 'borntoservewithgrace@gmail.com') {
+            const allowedAdmins = [
+                'borntoservewithgrace@gmail.com', 
+                'nylnathan340@gmail.com'
+            ];
+
+            if (user && allowedAdmins.includes(user.email)) {
                 loginScreen.style.display = 'none';
                 dashboardScreen.style.display = 'block';
                 loadBookings();
@@ -208,12 +212,12 @@
                 dashboardScreen.style.display = 'none';
                 if (user) {
                     signOut(auth);
-                    loginError.innerText = "Access denied. You are not the admin.";
+                    loginError.innerText = "Access denied. You are not an admin.";
                 }
             }
         });
 
-        // Load Bookings from Firestore
+        // Load Bookings
         async function loadBookings() {
             loadingText.style.display = 'block';
             bookingsGrid.innerHTML = '';
