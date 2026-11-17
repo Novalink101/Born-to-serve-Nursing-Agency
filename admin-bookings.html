@@ -36,10 +36,7 @@
             background-attachment: fixed;
         }
 
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
-        }
+        .container { max-width: 1000px; margin: 0 auto; }
 
         /* LOGIN SCREEN */
         .login-box {
@@ -54,23 +51,30 @@
             text-align: center;
         }
 
-        .login-box h2 { font-family: var(--font-heading); margin-bottom: 20px; color: var(--logo-pink); }
-        
-        .input-group { margin-bottom: 20px; text-align: left; }
-        .input-group label { display: block; font-size: 0.9rem; margin-bottom: 5px; font-weight: 500; }
-        .input-group input {
-            width: 100%; padding: 12px 15px; border-radius: 10px;
-            border: 1px solid rgba(232, 62, 140, 0.2); background: rgba(255, 255, 255, 0.8);
-            font-family: var(--font-body); outline: none; transition: all 0.3s;
-        }
-        .input-group input:focus { border-color: var(--logo-pink); box-shadow: 0 0 0 3px rgba(232, 62, 140, 0.1); }
+        .login-box h2 { font-family: var(--font-heading); margin-bottom: 10px; color: var(--logo-pink); }
+        .login-box p { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 25px; }
 
-        .btn {
-            width: 100%; padding: 14px; border-radius: 50px; border: none; cursor: pointer;
-            background: var(--logo-pink); color: white; font-weight: 600; font-size: 1rem;
-            transition: all 0.3s; box-shadow: 0 4px 15px rgba(232, 62, 140, 0.3);
+        .google-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            padding: 14px;
+            border-radius: 50px;
+            border: 1px solid #ddd;
+            background: white;
+            color: var(--text-dark);
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
         }
-        .btn:hover { background: #d12e7c; transform: translateY(-2px); }
+        .google-btn:hover { background: #f9f9f9; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .google-btn img { width: 20px; height: 20px; }
+
+        .error-text { color: red; font-size: 0.9rem; margin-top: 15px; }
 
         /* DASHBOARD */
         .dashboard { display: none; }
@@ -111,7 +115,6 @@
         .wa-btn:hover { background: #1ebe5d; transform: translateY(-2px); }
 
         .loading-text { text-align: center; color: var(--text-muted); margin-top: 50px; }
-        .error-text { color: red; font-size: 0.9rem; margin-top: 10px; }
 
         @media (max-width: 600px) {
             .booking-details { grid-template-columns: 1fr; }
@@ -126,17 +129,12 @@
         <!-- LOGIN SCREEN -->
         <div class="login-box" id="loginScreen">
             <h2>Admin Login</h2>
-            <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 25px;">Restricted Access</p>
+            <p>Restricted Access</p>
             
-            <div class="input-group">
-                <label>Email Address</label>
-                <input type="email" id="adminEmail" placeholder="admin@example.com">
-            </div>
-            <div class="input-group">
-                <label>Password</label>
-                <input type="password" id="adminPassword" placeholder="••••••••">
-            </div>
-            <button class="btn" id="loginBtn">Login</button>
+            <button class="google-btn" id="googleLoginBtn">
+                <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google">
+                Sign in with Google
+            </button>
             <p class="error-text" id="loginError"></p>
         </div>
 
@@ -152,10 +150,10 @@
 
     </div>
 
-    <script>
+    <script type="module">
         // Firebase Imports
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
         import { getFirestore, collection, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = {
@@ -171,30 +169,26 @@
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
+        const provider = new GoogleAuthProvider();
 
         const loginScreen = document.getElementById('loginScreen');
         const dashboardScreen = document.getElementById('dashboardScreen');
-        const loginBtn = document.getElementById('loginBtn');
+        const googleLoginBtn = document.getElementById('googleLoginBtn');
         const logoutBtn = document.getElementById('logoutBtn');
         const loginError = document.getElementById('loginError');
         const bookingsGrid = document.getElementById('bookingsGrid');
         const loadingText = document.getElementById('loadingText');
 
-        // Handle Login
-        loginBtn.addEventListener('click', async () => {
-            const email = document.getElementById('adminEmail').value;
-            const password = document.getElementById('adminPassword').value;
-            
-            loginBtn.innerText = "Logging in...";
-            loginBtn.disabled = true;
+        // Handle Google Login
+        googleLoginBtn.addEventListener('click', async () => {
             loginError.innerText = "";
-
+            googleLoginBtn.innerText = "Opening Google...";
+            
             try {
-                await signInWithEmailAndPassword(auth, email, password);
+                await signInWithPopup(auth, provider);
             } catch (error) {
-                loginError.innerText = "Invalid email or password.";
-                loginBtn.innerText = "Login";
-                loginBtn.disabled = false;
+                loginError.innerText = "Login failed. Please try again.";
+                googleLoginBtn.innerHTML = '<img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" style="width:20px; height:20px;"> Sign in with Google';
             }
         });
 
@@ -213,12 +207,9 @@
                 loginScreen.style.display = 'block';
                 dashboardScreen.style.display = 'none';
                 if (user) {
-                    // Logged in, but wrong email
                     signOut(auth);
                     loginError.innerText = "Access denied. You are not the admin.";
                 }
-                loginBtn.innerText = "Login";
-                loginBtn.disabled = false;
             }
         });
 
@@ -241,14 +232,12 @@
                 querySnapshot.forEach((doc) => {
                     const data = doc.data();
                     
-                    // Format date
                     let dateStr = "N/A";
                     if (data.submittedAt) {
                         const d = new Date(data.submittedAt);
                         dateStr = d.toLocaleDateString('en-ZA', { month: 'short', day: 'numeric', hour: '2-digit', minute:'2-digit' });
                     }
 
-                    // Clean phone number for WhatsApp link (remove spaces, ensure SA code)
                     let cleanPhone = data.phone.replace(/\s+/g, '');
                     if (cleanPhone.startsWith('0')) {
                         cleanPhone = '27' + cleanPhone.substring(1);
@@ -284,4 +273,4 @@
         }
     </script>
 </body>
-  </html>
+</html>
