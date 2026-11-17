@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Bookings | Born to Serve</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;1,600&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-base: #F7F7F9; 
+            --glass-bg: rgba(255, 255, 255, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.9); 
+            --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.05);
+            --text-dark: #2A2A2A;
+            --text-muted: #6B6B76;
+            --logo-pink: #E83E8C; 
+            --logo-soft-pink: #FCE4EC; 
+            --font-heading: 'Playfair Display', serif;
+            --font-body: 'Poppins', sans-serif;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: var(--font-body);
+            background-color: var(--bg-base);
+            color: var(--text-dark);
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 20px;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(232, 62, 140, 0.08), transparent 30%),
+                radial-gradient(circle at 90% 80%, rgba(252, 228, 236, 0.3), transparent 30%);
+            background-attachment: fixed;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        /* LOGIN SCREEN */
+        .login-box {
+            max-width: 400px;
+            margin: 100px auto;
+            padding: 40px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            box-shadow: var(--glass-shadow);
+            text-align: center;
+        }
+
+        .login-box h2 { font-family: var(--font-heading); margin-bottom: 20px; color: var(--logo-pink); }
+        
+        .input-group { margin-bottom: 20px; text-align: left; }
+        .input-group label { display: block; font-size: 0.9rem; margin-bottom: 5px; font-weight: 500; }
+        .input-group input {
+            width: 100%; padding: 12px 15px; border-radius: 10px;
+            border: 1px solid rgba(232, 62, 140, 0.2); background: rgba(255, 255, 255, 0.8);
+            font-family: var(--font-body); outline: none; transition: all 0.3s;
+        }
+        .input-group input:focus { border-color: var(--logo-pink); box-shadow: 0 0 0 3px rgba(232, 62, 140, 0.1); }
+
+        .btn {
+            width: 100%; padding: 14px; border-radius: 50px; border: none; cursor: pointer;
+            background: var(--logo-pink); color: white; font-weight: 600; font-size: 1rem;
+            transition: all 0.3s; box-shadow: 0 4px 15px rgba(232, 62, 140, 0.3);
+        }
+        .btn:hover { background: #d12e7c; transform: translateY(-2px); }
+
+        /* DASHBOARD */
+        .dashboard { display: none; }
+        
+        .header {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 30px; padding: 20px; background: var(--glass-bg);
+            border-radius: 20px; border: 1px solid var(--glass-border);
+        }
+        .header h1 { font-family: var(--font-heading); font-size: 1.8rem; color: var(--text-dark); }
+        .logout-btn {
+            padding: 10px 20px; border-radius: 50px; border: 1px solid var(--logo-pink);
+            background: transparent; color: var(--logo-pink); font-weight: 600; cursor: pointer; transition: all 0.3s;
+        }
+        .logout-btn:hover { background: var(--logo-pink); color: white; }
+
+        .bookings-grid { display: grid; grid-template-columns: 1fr; gap: 20px; }
+
+        .booking-card {
+            background: rgba(255, 255, 255, 0.85); border-radius: 16px;
+            padding: 25px; border-left: 5px solid var(--logo-pink);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05); display: flex; flex-direction: column; gap: 15px;
+        }
+        
+        .booking-header { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 1px solid #eee; padding-bottom: 10px; }
+        .booking-header h3 { font-size: 1.2rem; color: var(--text-dark); }
+        .booking-date { font-size: 0.8rem; color: var(--text-muted); background: #f0f0f0; padding: 4px 10px; border-radius: 20px; }
+
+        .booking-details { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 0.95rem; }
+        .booking-details strong { color: var(--logo-pink); }
+        
+        .wa-btn {
+            display: inline-flex; align-items: center; gap: 8px; text-decoration: none;
+            background: #25D366; color: white; padding: 10px 20px; border-radius: 10px;
+            font-weight: 600; font-size: 0.9rem; align-self: flex-start; margin-top: 10px;
+            transition: all 0.3s;
+        }
+        .wa-btn:hover { background: #1ebe5d; transform: translateY(-2px); }
+
+        .loading-text { text-align: center; color: var(--text-muted); margin-top: 50px; }
+        .error-text { color: red; font-size: 0.9rem; margin-top: 10px; }
+
+        @media (max-width: 600px) {
+            .booking-details { grid-template-columns: 1fr; }
+            .header { flex-direction: column; gap: 15px; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        
+        <!-- LOGIN SCREEN -->
+        <div class="login-box" id="loginScreen">
+            <h2>Admin Login</h2>
+            <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 25px;">Restricted Access</p>
+            
+            <div class="input-group">
+                <label>Email Address</label>
+                <input type="email" id="adminEmail" placeholder="admin@example.com">
+            </div>
+            <div class="input-group">
+                <label>Password</label>
+                <input type="password" id="adminPassword" placeholder="••••••••">
+            </div>
+            <button class="btn" id="loginBtn">Login</button>
+            <p class="error-text" id="loginError"></p>
+        </div>
+
+        <!-- DASHBOARD -->
+        <div class="dashboard" id="dashboardScreen">
+            <div class="header">
+                <h1>Patient Bookings</h1>
+                <button class="logout-btn" id="logoutBtn">Logout</button>
+            </div>
+            <div class="loading-text" id="loadingText">Loading applications...</div>
+            <div class="bookings-grid" id="bookingsGrid"></div>
+        </div>
+
+    </div>
+
+    <script>
+        // Firebase Imports
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore, collection, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAyqQOOjZym77vZDTdyY059gD9_QJNHf1w",
+            authDomain: "born-to-serve.firebaseapp.com",
+            projectId: "born-to-serve",
+            storageBucket: "born-to-serve.firebasestorage.app",
+            messagingSenderId: "1055963844835",
+            appId: "1:1055963844835:web:a6a3bf8f4f2a9a082db5d6",
+            measurementId: "G-49FQ2NX234"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        const loginScreen = document.getElementById('loginScreen');
+        const dashboardScreen = document.getElementById('dashboardScreen');
+        const loginBtn = document.getElementById('loginBtn');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const loginError = document.getElementById('loginError');
+        const bookingsGrid = document.getElementById('bookingsGrid');
+        const loadingText = document.getElementById('loadingText');
+
+        // Handle Login
+        loginBtn.addEventListener('click', async () => {
+            const email = document.getElementById('adminEmail').value;
+            const password = document.getElementById('adminPassword').value;
+            
+            loginBtn.innerText = "Logging in...";
+            loginBtn.disabled = true;
+            loginError.innerText = "";
+
+            try {
+                await signInWithEmailAndPassword(auth, email, password);
+            } catch (error) {
+                loginError.innerText = "Invalid email or password.";
+                loginBtn.innerText = "Login";
+                loginBtn.disabled = false;
+            }
+        });
+
+        // Handle Logout
+        logoutBtn.addEventListener('click', () => {
+            signOut(auth);
+        });
+
+        // Check Auth State
+        onAuthStateChanged(auth, (user) => {
+            if (user && user.email === 'borntoservewithgrace@gmail.com') {
+                loginScreen.style.display = 'none';
+                dashboardScreen.style.display = 'block';
+                loadBookings();
+            } else {
+                loginScreen.style.display = 'block';
+                dashboardScreen.style.display = 'none';
+                if (user) {
+                    // Logged in, but wrong email
+                    signOut(auth);
+                    loginError.innerText = "Access denied. You are not the admin.";
+                }
+                loginBtn.innerText = "Login";
+                loginBtn.disabled = false;
+            }
+        });
+
+        // Load Bookings from Firestore
+        async function loadBookings() {
+            loadingText.style.display = 'block';
+            bookingsGrid.innerHTML = '';
+
+            try {
+                const q = query(collection(db, "bookings"), orderBy("submittedAt", "desc"));
+                const querySnapshot = await getDocs(q);
+                
+                loadingText.style.display = 'none';
+
+                if (querySnapshot.empty) {
+                    bookingsGrid.innerHTML = '<p style="text-align:center; grid-column: 1/-1;">No bookings found yet.</p>';
+                    return;
+                }
+
+                querySnapshot.forEach((doc) => {
+                    const data = doc.data();
+                    
+                    // Format date
+                    let dateStr = "N/A";
+                    if (data.submittedAt) {
+                        const d = new Date(data.submittedAt);
+                        dateStr = d.toLocaleDateString('en-ZA', { month: 'short', day: 'numeric', hour: '2-digit', minute:'2-digit' });
+                    }
+
+                    // Clean phone number for WhatsApp link (remove spaces, ensure SA code)
+                    let cleanPhone = data.phone.replace(/\s+/g, '');
+                    if (cleanPhone.startsWith('0')) {
+                        cleanPhone = '27' + cleanPhone.substring(1);
+                    }
+
+                    const card = document.createElement('div');
+                    card.className = 'booking-card';
+                    card.innerHTML = `
+                        <div class="booking-header">
+                            <h3>${data.name}</h3>
+                            <span class="booking-date">${dateStr}</span>
+                        </div>
+                        <div class="booking-details">
+                            <div><strong>Phone:</strong> ${data.phone}</div>
+                            <div><strong>Care For:</strong> ${data.recipient}</div>
+                            <div><strong>Care Type:</strong> ${data.careType}</div>
+                            <div><strong>Start Date:</strong> ${data.startDate}</div>
+                            <div><strong>Shift:</strong> ${data.shift}</div>
+                        </div>
+                        ${data.notes !== 'None' ? `<div style="font-size:0.9rem;"><strong>Notes:</strong> ${data.notes}</div>` : ''}
+                        <a href="https://wa.me/${cleanPhone}?text=Hello%20${data.name},%20thank%20you%20for%20booking%20with%20Born%20to%20Serve.%20How%20can%20we%20assist%20you%3F" target="_blank" class="wa-btn">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
+                            Reply to Client
+                        </a>
+                    `;
+                    bookingsGrid.appendChild(card);
+                });
+
+            } catch (error) {
+                console.error("Error loading bookings: ", error);
+                loadingText.innerText = "Error loading bookings. Make sure your Firebase rules are correct.";
+            }
+        }
+    </script>
+</body>
+  </html>
