@@ -1,25 +1,20 @@
 const express = require('express');
-const bodyParser = require('body-parser');
+const path = require('path');
 const app = express();
+
+// Render assigns a port dynamically via environment variables
 const PORT = process.env.PORT || 3000;
 
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
-
-// Serve your HTML files
+// Serve all static files (index.html, Book.html, images, etc.) from the root directory
 app.use(express.static(__dirname));
 
-// Create an endpoint to receive form data
-app.post('/api/apply', (req, res) => {
-    console.log("NEW APPLICATION RECEIVED:");
-    console.log(req.body);
-    
-    // IN THE FUTURE: Here is where you connect to a database (like MongoDB or Supabase) to save the data.
-
-    res.json({ success: true, message: "Application received!" });
+// Fallback: If a user tries to visit a page that doesn't exist, send them to the homepage
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'index.html'));
 });
 
 // Start the server
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
+    console.log(`Website is live!`);
 });
