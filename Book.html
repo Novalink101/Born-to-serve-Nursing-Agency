@@ -164,7 +164,7 @@
             Back
         </a>
         <div class="logo-icon-small">
-            <img src="https://img.sanishtech.com/u/3ab7c87c7e4d879b7da2c6245998ae10.jpg" alt="Logo">
+            <img src="logo.png" alt="Logo" onerror="this.style.display='none'">
         </div>
     </div>
 
@@ -427,7 +427,7 @@
             document.getElementById('sumShift').textContent = document.getElementById('shiftTime').value;
         }
 
-        // --- FIREBASE & WHATSAPP SUBMISSION LOGIC ---
+        // FIREBASE & WHATSAPP SUBMISSION LOGIC
         document.getElementById('bookingForm').addEventListener('submit', async (e) => {
             e.preventDefault();
 
@@ -439,12 +439,10 @@
             const shift = document.getElementById('shiftTime').value;
             const notes = document.getElementById('notes').value || "None";
 
-            // Show saving state
             submitBtn.innerHTML = "Saving...";
             submitBtn.disabled = true;
 
             try {
-                // Dynamically import Firebase modules
                 const { initializeApp } = await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js");
                 const { getFirestore, collection, addDoc } = await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js");
 
@@ -461,7 +459,6 @@
                 const app = initializeApp(firebaseConfig);
                 const db = getFirestore(app);
 
-                // Save to database
                 await addDoc(collection(db, "bookings"), {
                     name: name,
                     phone: phone,
@@ -480,7 +477,6 @@
                 alert("We couldn't save your request to the database, but we will still open WhatsApp for you.");
             }
 
-            // Construct WhatsApp Message
             const waNumber = "27747416029"; 
             let message = `*NEW BOOKING REQUEST*%0A%0A`;
             message += `*Name:* ${name}%0A`;
@@ -492,14 +488,10 @@
             message += `*Notes:* ${notes}%0A%0A`;
             message += `Please confirm my booking. Thank you!`;
 
-            // Reset button state
             submitBtn.innerHTML = "Send via WhatsApp";
             submitBtn.disabled = false;
-
-            // Open WhatsApp
             window.open(`https://wa.me/${waNumber}?text=${message}`, '_blank');
             
-            // Reset form
             document.getElementById('bookingForm').reset();
             currentStep = 1;
             updateStep();
@@ -509,4 +501,4 @@
         updateStep();
     </script>
 </body>
-</html>
+    </html>
