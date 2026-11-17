@@ -8,28 +8,20 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;1,600&family=Poppins:wght@300;400;500;600&family=Great+Vibes&display=swap" rel="stylesheet">
     <style>
-        /* --- CSS VARIABLES & RESET --- */
         :root {
             --bg-base: #F7F7F9; 
             --glass-bg: rgba(255, 255, 255, 0.7);
             --glass-border: rgba(255, 255, 255, 0.9); 
             --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.05);
-            
             --text-dark: #2A2A2A;
             --text-muted: #6B6B76;
-            
             --logo-pink: #E83E8C; 
             --logo-soft-pink: #FCE4EC; 
-            
             --font-heading: 'Playfair Display', serif;
             --font-body: 'Poppins', sans-serif;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: var(--font-body);
@@ -46,7 +38,6 @@
             background-attachment: fixed;
         }
 
-        /* --- TOP NAVIGATION --- */
         .top-nav {
             width: 100%;
             padding: 20px 5%;
@@ -65,13 +56,8 @@
             transition: color 0.3s;
         }
 
-        .back-btn:hover {
-            color: var(--logo-pink);
-        }
-
-        .back-btn svg {
-            color: var(--logo-pink);
-        }
+        .back-btn:hover { color: var(--logo-pink); }
+        .back-btn svg { color: var(--logo-pink); }
 
         .logo-icon-small {
             width: 40px;
@@ -85,13 +71,8 @@
             overflow: hidden;
         }
         
-        .logo-icon-small img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
+        .logo-icon-small img { width: 100%; height: 100%; object-fit: cover; }
 
-        /* --- FORM CONTAINER --- */
         .form-container {
             width: 90%;
             max-width: 650px;
@@ -107,297 +88,76 @@
             overflow: hidden;
         }
 
-        .form-header {
-            text-align: center;
-            margin-bottom: 30px;
+        .form-header { text-align: center; margin-bottom: 30px; }
+        .form-header h2 { font-family: var(--font-heading); font-size: 2rem; color: var(--text-dark); margin-bottom: 5px; }
+        .form-header p { color: var(--text-muted); font-size: 0.9rem; }
+
+        .progress-container { display: flex; justify-content: space-between; position: relative; margin-bottom: 40px; }
+        .progress-line { position: absolute; top: 15px; left: 0; height: 3px; background: #e0e0e0; width: 100%; z-index: 1; }
+        .progress-line-fill { position: absolute; top: 15px; left: 0; height: 3px; background: var(--logo-pink); width: 0%; z-index: 2; transition: width 0.4s ease; }
+
+        .step-indicator { position: relative; z-index: 3; display: flex; flex-direction: column; align-items: center; gap: 8px; width: 30px; }
+        .step-circle { width: 32px; height: 32px; border-radius: 50%; background: white; border: 3px solid #e0e0e0; display: flex; justify-content: center; align-items: center; font-weight: 600; font-size: 0.9rem; color: #a0a0a0; transition: all 0.4s ease; }
+        
+        .step-indicator.active .step-circle { border-color: var(--logo-pink); background: var(--logo-pink); color: white; box-shadow: 0 0 15px rgba(232, 62, 140, 0.4); }
+        .step-indicator.completed .step-circle { border-color: var(--logo-pink); background: var(--logo-pink); color: white; }
+
+        .step-label { font-size: 0.75rem; font-weight: 500; color: var(--text-muted); position: absolute; top: 40px; white-space: nowrap; }
+        .step-indicator.active .step-label { color: var(--logo-pink); font-weight: 600; }
+
+        .form-step { display: none; animation: fadeIn 0.4s ease forwards; }
+        .form-step.active { display: block; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .input-group { margin-bottom: 20px; }
+        .input-group label { display: block; font-size: 0.9rem; font-weight: 500; margin-bottom: 8px; color: var(--text-dark); }
+        .input-group input, .input-group select, .input-group textarea {
+            width: 100%; padding: 14px 15px; border-radius: 12px;
+            border: 1px solid rgba(232, 62, 140, 0.2); background: rgba(255, 255, 255, 0.8);
+            font-family: var(--font-body); font-size: 1rem; color: var(--text-dark); outline: none; transition: all 0.3s ease;
         }
 
-        .form-header h2 {
-            font-family: var(--font-heading);
-            font-size: 2rem;
-            color: var(--text-dark);
-            margin-bottom: 5px;
+        .input-group input:focus, .input-group select:focus, .input-group textarea:focus {
+            border-color: var(--logo-pink); box-shadow: 0 0 0 3px rgba(232, 62, 140, 0.1); background: white;
         }
 
-        .form-header p {
-            color: var(--text-muted);
-            font-size: 0.9rem;
-        }
-
-        /* --- PROGRESS BAR --- */
-        .progress-container {
-            display: flex;
-            justify-content: space-between;
-            position: relative;
-            margin-bottom: 40px;
-        }
-
-        .progress-line {
-            position: absolute;
-            top: 15px;
-            left: 0;
-            height: 3px;
-            background: #e0e0e0;
-            width: 100%;
-            z-index: 1;
-        }
-
-        .progress-line-fill {
-            position: absolute;
-            top: 15px;
-            left: 0;
-            height: 3px;
-            background: var(--logo-pink);
-            width: 0%;
-            z-index: 2;
-            transition: width 0.4s ease;
-        }
-
-        .step-indicator {
-            position: relative;
-            z-index: 3;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 8px;
-            width: 30px;
-        }
-
-        .step-circle {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            background: white;
-            border: 3px solid #e0e0e0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-weight: 600;
-            font-size: 0.9rem;
-            color: #a0a0a0;
-            transition: all 0.4s ease;
-        }
-
-        .step-indicator.active .step-circle {
-            border-color: var(--logo-pink);
-            background: var(--logo-pink);
-            color: white;
-            box-shadow: 0 0 15px rgba(232, 62, 140, 0.4);
-        }
-
-        .step-indicator.completed .step-circle {
-            border-color: var(--logo-pink);
-            background: var(--logo-pink);
-            color: white;
-        }
-
-        .step-label {
-            font-size: 0.75rem;
-            font-weight: 500;
-            color: var(--text-muted);
-            position: absolute;
-            top: 40px;
-            white-space: nowrap;
-        }
-
-        .step-indicator.active .step-label {
-            color: var(--logo-pink);
-            font-weight: 600;
-        }
-
-        /* --- FORM STEPS --- */
-        .form-step {
-            display: none;
-            animation: fadeIn 0.4s ease forwards;
-        }
-
-        .form-step.active {
-            display: block;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .input-group {
-            margin-bottom: 20px;
-        }
-
-        .input-group label {
-            display: block;
-            font-size: 0.9rem;
-            font-weight: 500;
-            margin-bottom: 8px;
-            color: var(--text-dark);
-        }
-
-        .input-group input, 
-        .input-group select, 
-        .input-group textarea {
-            width: 100%;
-            padding: 14px 15px;
-            border-radius: 12px;
-            border: 1px solid rgba(232, 62, 140, 0.2);
-            background: rgba(255, 255, 255, 0.8);
-            font-family: var(--font-body);
-            font-size: 1rem;
-            color: var(--text-dark);
-            outline: none;
-            transition: all 0.3s ease;
-        }
-
-        .input-group input:focus, 
-        .input-group select:focus, 
-        .input-group textarea:focus {
-            border-color: var(--logo-pink);
-            box-shadow: 0 0 0 3px rgba(232, 62, 140, 0.1);
-            background: white;
-        }
-
-        /* Checkbox/Radio Grid */
-        .options-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-        }
-
+        .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
         .option-card {
-            border: 1px solid rgba(232, 62, 140, 0.2);
-            background: rgba(255, 255, 255, 0.6);
-            border-radius: 12px;
-            padding: 15px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-size: 0.9rem;
-            font-weight: 500;
-            color: var(--text-dark);
+            border: 1px solid rgba(232, 62, 140, 0.2); background: rgba(255, 255, 255, 0.6);
+            border-radius: 12px; padding: 15px; text-align: center; cursor: pointer;
+            transition: all 0.3s ease; font-size: 0.9rem; font-weight: 500; color: var(--text-dark);
         }
 
-        .option-card:hover {
-            background: white;
-            border-color: var(--logo-pink);
-        }
+        .option-card:hover { background: white; border-color: var(--logo-pink); }
+        .option-card input[type="radio"] { display: none; }
+        .option-card.selected { background: var(--logo-soft-pink); border-color: var(--logo-pink); color: var(--logo-pink); box-shadow: 0 4px 10px rgba(232, 62, 140, 0.1); }
 
-        .option-card input[type="radio"] {
-            display: none;
-        }
+        .btn-group { display: flex; justify-content: space-between; margin-top: 30px; gap: 15px; }
+        .btn { padding: 14px 25px; border-radius: 50px; font-weight: 600; font-size: 1rem; cursor: pointer; border: none; transition: all 0.3s ease; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        
+        .btn-prev { background: rgba(255, 255, 255, 0.8); color: var(--text-muted); border: 1px solid #ddd; }
+        .btn-prev:hover { background: #eee; color: var(--text-dark); }
+        .btn-next { background: var(--logo-pink); color: white; flex: 1; box-shadow: 0 4px 15px rgba(232, 62, 140, 0.3); }
+        .btn-next:hover { background: #d12e7c; transform: translateY(-2px); }
+        .btn-submit { background: #25D366; color: white; flex: 1; box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3); }
+        .btn-submit:hover { background: #1ebe5d; transform: translateY(-2px); }
 
-        .option-card.selected {
-            background: var(--logo-soft-pink);
-            border-color: var(--logo-pink);
-            color: var(--logo-pink);
-            box-shadow: 0 4px 10px rgba(232, 62, 140, 0.1);
-        }
+        .summary-box { background: rgba(255, 255, 255, 0.6); border-radius: 12px; padding: 20px; border: 1px solid rgba(232, 62, 140, 0.1); }
+        .summary-item { margin-bottom: 15px; border-bottom: 1px dashed #ddd; padding-bottom: 10px; }
+        .summary-item:last-child { margin-bottom: 0; border-bottom: none; padding-bottom: 0; }
+        .summary-item span { display: block; font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
+        .summary-item strong { font-size: 1rem; color: var(--text-dark); }
 
-        /* --- BUTTONS --- */
-        .btn-group {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 30px;
-            gap: 15px;
-        }
-
-        .btn {
-            padding: 14px 25px;
-            border-radius: 50px;
-            font-weight: 600;
-            font-size: 1rem;
-            cursor: pointer;
-            border: none;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-
-        .btn-prev {
-            background: rgba(255, 255, 255, 0.8);
-            color: var(--text-muted);
-            border: 1px solid #ddd;
-        }
-
-        .btn-prev:hover {
-            background: #eee;
-            color: var(--text-dark);
-        }
-
-        .btn-next {
-            background: var(--logo-pink);
-            color: white;
-            flex: 1;
-            box-shadow: 0 4px 15px rgba(232, 62, 140, 0.3);
-        }
-
-        .btn-next:hover {
-            background: #d12e7c;
-            transform: translateY(-2px);
-        }
-
-        .btn-submit {
-            background: #25D366; /* WhatsApp Green */
-            color: white;
-            flex: 1;
-            box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3);
-        }
-
-        .btn-submit:hover {
-            background: #1ebe5d;
-            transform: translateY(-2px);
-        }
-
-        /* --- SUMMARY REVIEW --- */
-        .summary-box {
-            background: rgba(255, 255, 255, 0.6);
-            border-radius: 12px;
-            padding: 20px;
-            border: 1px solid rgba(232, 62, 140, 0.1);
-        }
-
-        .summary-item {
-            margin-bottom: 15px;
-            border-bottom: 1px dashed #ddd;
-            padding-bottom: 10px;
-        }
-
-        .summary-item:last-child {
-            margin-bottom: 0;
-            border-bottom: none;
-            padding-bottom: 0;
-        }
-
-        .summary-item span {
-            display: block;
-            font-size: 0.8rem;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .summary-item strong {
-            font-size: 1rem;
-            color: var(--text-dark);
-        }
-
-        /* Mobile */
         @media (max-width: 600px) {
-            .form-container {
-                padding: 25px 20px;
-            }
-            .step-label {
-                display: none; /* Hide labels on small screens to save space */
-            }
-            .options-grid {
-                grid-template-columns: 1fr;
-            }
+            .form-container { padding: 25px 20px; }
+            .step-label { display: none; }
+            .options-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
 
-    <!-- Top Navigation -->
     <div class="top-nav">
         <a href="index.html" class="back-btn">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
@@ -408,15 +168,12 @@
         </div>
     </div>
 
-    <!-- Main Form Container -->
     <div class="form-container">
-        
         <div class="form-header">
             <h2>Book a Caregiver</h2>
             <p>Please provide a few details so we can assist you better.</p>
         </div>
 
-        <!-- Progress Bar -->
         <div class="progress-container">
             <div class="progress-line"></div>
             <div class="progress-line-fill" id="progressFill"></div>
@@ -440,8 +197,7 @@
         </div>
 
         <form id="bookingForm">
-            
-            <!-- STEP 1: Personal Details -->
+            <!-- STEP 1 -->
             <div class="form-step active" id="step-1">
                 <div class="input-group">
                     <label>Your Name</label>
@@ -462,7 +218,7 @@
                 </div>
             </div>
 
-            <!-- STEP 2: Care Needs -->
+            <!-- STEP 2 -->
             <div class="form-step" id="step-2">
                 <div class="input-group">
                     <label>Select the type of care needed</label>
@@ -495,7 +251,7 @@
                 </div>
             </div>
 
-            <!-- STEP 3: Schedule -->
+            <!-- STEP 3 -->
             <div class="form-step" id="step-3">
                 <div class="input-group">
                     <label>When do you need care to start?</label>
@@ -517,7 +273,7 @@
                 </div>
             </div>
 
-            <!-- STEP 4: Review & Submit -->
+            <!-- STEP 4 -->
             <div class="form-step" id="step-4">
                 <div class="summary-box">
                     <div class="summary-item">
@@ -546,11 +302,10 @@
                     </div>
                 </div>
                 <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 15px; text-align: center;">
-                    Clicking "Send via WhatsApp" will open WhatsApp with your request pre-filled. We will then confirm your booking.
+                    Clicking "Send via WhatsApp" will securely save your request and open WhatsApp to confirm.
                 </p>
             </div>
 
-            <!-- Buttons -->
             <div class="btn-group">
                 <button type="button" class="btn btn-prev" id="prevBtn" style="display: none;">Back</button>
                 <button type="button" class="btn btn-next" id="nextBtn">Next Step</button>
@@ -562,7 +317,6 @@
         </form>
     </div>
 
-    <!-- Javascript for Form Logic -->
     <script>
         let currentStep = 1;
         const totalSteps = 4;
@@ -574,24 +328,16 @@
         const stepIndicators = document.querySelectorAll('.step-indicator');
         const formSteps = document.querySelectorAll('.form-step');
 
-        // Handle Option Card Selection
         function selectOption(card) {
-            // Remove selected class from all cards in the same group
             const parent = card.parentElement;
             const cards = parent.querySelectorAll('.option-card');
             cards.forEach(c => c.classList.remove('selected'));
-            
-            // Add selected class to clicked card
             card.classList.add('selected');
-            
-            // Ensure radio is checked
             const radio = card.querySelector('input[type="radio"]');
             if (radio) radio.checked = true;
         }
 
-        // Update UI based on current step
         function updateStep() {
-            // Update buttons
             if (currentStep === 1) {
                 prevBtn.style.display = 'none';
             } else {
@@ -607,11 +353,9 @@
                 submitBtn.style.display = 'none';
             }
 
-            // Update Progress Bar
             const progressPercentage = ((currentStep - 1) / (totalSteps - 1)) * 100;
             progressFill.style.width = `${progressPercentage}%`;
 
-            // Update Step Indicators
             stepIndicators.forEach((indicator, index) => {
                 if (index + 1 < currentStep) {
                     indicator.classList.add('completed');
@@ -624,7 +368,6 @@
                 }
             });
 
-            // Show/Hide Form Steps
             formSteps.forEach((step, index) => {
                 if (index + 1 === currentStep) {
                     step.classList.add('active');
@@ -634,9 +377,7 @@
             });
         }
 
-        // Next Button Click
         nextBtn.addEventListener('click', () => {
-            // Basic HTML5 Validation for required fields in current step
             const currentStepDiv = document.getElementById(`step-${currentStep}`);
             const inputs = currentStepDiv.querySelectorAll('input[required], select[required]');
             let isValid = true;
@@ -650,7 +391,6 @@
                 }
             });
 
-            // Special validation for radio buttons
             if (currentStep === 2) {
                 const radioChecked = currentStepDiv.querySelector('input[name="careType"]:checked');
                 if (!radioChecked) {
@@ -665,7 +405,6 @@
             }
         });
 
-        // Previous Button Click
         prevBtn.addEventListener('click', () => {
             if (currentStep > 1) {
                 currentStep--;
@@ -673,7 +412,6 @@
             }
         });
 
-        // Populate Summary on Step 4
         function populateSummary() {
             document.getElementById('sumName').textContent = document.getElementById('clientName').value;
             document.getElementById('sumPhone').textContent = document.getElementById('clientPhone').value;
@@ -682,7 +420,6 @@
             const selectedType = document.querySelector('input[name="careType"]:checked');
             document.getElementById('sumType').textContent = selectedType ? selectedType.value : 'Not selected';
             
-            // Format Date
             const dateVal = document.getElementById('startDate').value;
             const formattedDate = dateVal ? new Date(dateVal).toLocaleDateString('en-ZA', { year: 'numeric', month: 'long', day: 'numeric' }) : 'Not selected';
             document.getElementById('sumDate').textContent = formattedDate;
@@ -690,11 +427,10 @@
             document.getElementById('sumShift').textContent = document.getElementById('shiftTime').value;
         }
 
-        // Handle Form Submission (Send to WhatsApp)
-        document.getElementById('bookingForm').addEventListener('submit', (e) => {
+        // --- FIREBASE & WHATSAPP SUBMISSION LOGIC ---
+        document.getElementById('bookingForm').addEventListener('submit', async (e) => {
             e.preventDefault();
 
-            // Gather data
             const name = document.getElementById('clientName').value;
             const phone = document.getElementById('clientPhone').value;
             const recipient = document.getElementById('careRecipient').value;
@@ -703,8 +439,49 @@
             const shift = document.getElementById('shiftTime').value;
             const notes = document.getElementById('notes').value || "None";
 
+            // Show saving state
+            submitBtn.innerHTML = "Saving...";
+            submitBtn.disabled = true;
+
+            try {
+                // Dynamically import Firebase modules
+                const { initializeApp } = await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js");
+                const { getFirestore, collection, addDoc } = await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js");
+
+                const firebaseConfig = {
+                    apiKey: "AIzaSyAyqQOOjZym77vZDTdyY059gD9_QJNHf1w",
+                    authDomain: "born-to-serve.firebaseapp.com",
+                    projectId: "born-to-serve",
+                    storageBucket: "born-to-serve.firebasestorage.app",
+                    messagingSenderId: "1055963844835",
+                    appId: "1:1055963844835:web:a6a3bf8f4f2a9a082db5d6",
+                    measurementId: "G-49FQ2NX234"
+                };
+
+                const app = initializeApp(firebaseConfig);
+                const db = getFirestore(app);
+
+                // Save to database
+                await addDoc(collection(db, "bookings"), {
+                    name: name,
+                    phone: phone,
+                    recipient: recipient,
+                    careType: careType,
+                    startDate: date,
+                    shift: shift,
+                    notes: notes,
+                    submittedAt: new Date().toISOString()
+                });
+
+                console.log("Application securely saved to Firebase!");
+
+            } catch (error) {
+                console.error("Firebase Error: ", error);
+                alert("We couldn't save your request to the database, but we will still open WhatsApp for you.");
+            }
+
             // Construct WhatsApp Message
-            const waNumber = "27747416029"; // Your number
+            const waNumber = "27747416029"; 
             let message = `*NEW BOOKING REQUEST*%0A%0A`;
             message += `*Name:* ${name}%0A`;
             message += `*Phone:* ${phone}%0A`;
@@ -715,12 +492,21 @@
             message += `*Notes:* ${notes}%0A%0A`;
             message += `Please confirm my booking. Thank you!`;
 
+            // Reset button state
+            submitBtn.innerHTML = "Send via WhatsApp";
+            submitBtn.disabled = false;
+
             // Open WhatsApp
             window.open(`https://wa.me/${waNumber}?text=${message}`, '_blank');
+            
+            // Reset form
+            document.getElementById('bookingForm').reset();
+            currentStep = 1;
+            updateStep();
+            document.querySelectorAll('.option-card').forEach(c => c.classList.remove('selected'));
         });
 
-        // Initialize
         updateStep();
     </script>
 </body>
-  </html>
+</html>
