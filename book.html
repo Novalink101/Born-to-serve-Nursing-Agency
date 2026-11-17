@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book a Caregiver | Born to Serve With Grace</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;1,600&family=Poppins:wght@300;400;500;600&family=Great+Vibes&display=swap" rel="stylesheet">
+    <style>
+        /* --- CSS VARIABLES & RESET --- */
+        :root {
+            --bg-base: #F7F7F9; 
+            --glass-bg: rgba(255, 255, 255, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.9); 
+            --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.05);
+            
+            --text-dark: #2A2A2A;
+            --text-muted: #6B6B76;
+            
+            --logo-pink: #E83E8C; 
+            --logo-soft-pink: #FCE4EC; 
+            
+            --font-heading: 'Playfair Display', serif;
+            --font-body: 'Poppins', sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background-color: var(--bg-base);
+            color: var(--text-dark);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(232, 62, 140, 0.08), transparent 30%),
+                radial-gradient(circle at 90% 80%, rgba(252, 228, 236, 0.3), transparent 30%);
+            background-attachment: fixed;
+        }
+
+        /* --- TOP NAVIGATION --- */
+        .top-nav {
+            width: 100%;
+            padding: 20px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .back-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            color: var(--text-dark);
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .back-btn:hover {
+            color: var(--logo-pink);
+        }
+
+        .back-btn svg {
+            color: var(--logo-pink);
+        }
+
+        .logo-icon-small {
+            width: 40px;
+            height: 40px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 15px rgba(232, 62, 140, 0.2);
+            overflow: hidden;
+        }
+        
+        .logo-icon-small img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* --- FORM CONTAINER --- */
+        .form-container {
+            width: 90%;
+            max-width: 650px;
+            margin: 20px auto 60px;
+            padding: 40px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            box-shadow: var(--glass-shadow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .form-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .form-header h2 {
+            font-family: var(--font-heading);
+            font-size: 2rem;
+            color: var(--text-dark);
+            margin-bottom: 5px;
+        }
+
+        .form-header p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        /* --- PROGRESS BAR --- */
+        .progress-container {
+            display: flex;
+            justify-content: space-between;
+            position: relative;
+            margin-bottom: 40px;
+        }
+
+        .progress-line {
+            position: absolute;
+            top: 15px;
+            left: 0;
+            height: 3px;
+            background: #e0e0e0;
+            width: 100%;
+            z-index: 1;
+        }
+
+        .progress-line-fill {
+            position: absolute;
+            top: 15px;
+            left: 0;
+            height: 3px;
+            background: var(--logo-pink);
+            width: 0%;
+            z-index: 2;
+            transition: width 0.4s ease;
+        }
+
+        .step-indicator {
+            position: relative;
+            z-index: 3;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            width: 30px;
+        }
+
+        .step-circle {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: white;
+            border: 3px solid #e0e0e0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: #a0a0a0;
+            transition: all 0.4s ease;
+        }
+
+        .step-indicator.active .step-circle {
+            border-color: var(--logo-pink);
+            background: var(--logo-pink);
+            color: white;
+            box-shadow: 0 0 15px rgba(232, 62, 140, 0.4);
+        }
+
+        .step-indicator.completed .step-circle {
+            border-color: var(--logo-pink);
+            background: var(--logo-pink);
+            color: white;
+        }
+
+        .step-label {
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: var(--text-muted);
+            position: absolute;
+            top: 40px;
+            white-space: nowrap;
+        }
+
+        .step-indicator.active .step-label {
+            color: var(--logo-pink);
+            font-weight: 600;
+        }
+
+        /* --- FORM STEPS --- */
+        .form-step {
+            display: none;
+            animation: fadeIn 0.4s ease forwards;
+        }
+
+        .form-step.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            display: block;
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: var(--text-dark);
+        }
+
+        .input-group input, 
+        .input-group select, 
+        .input-group textarea {
+            width: 100%;
+            padding: 14px 15px;
+            border-radius: 12px;
+            border: 1px solid rgba(232, 62, 140, 0.2);
+            background: rgba(255, 255, 255, 0.8);
+            font-family: var(--font-body);
+            font-size: 1rem;
+            color: var(--text-dark);
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .input-group input:focus, 
+        .input-group select:focus, 
+        .input-group textarea:focus {
+            border-color: var(--logo-pink);
+            box-shadow: 0 0 0 3px rgba(232, 62, 140, 0.1);
+            background: white;
+        }
+
+        /* Checkbox/Radio Grid */
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .option-card {
+            border: 1px solid rgba(232, 62, 140, 0.2);
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 12px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--text-dark);
+        }
+
+        .option-card:hover {
+            background: white;
+            border-color: var(--logo-pink);
+        }
+
+        .option-card input[type="radio"] {
+            display: none;
+        }
+
+        .option-card.selected {
+            background: var(--logo-soft-pink);
+            border-color: var(--logo-pink);
+            color: var(--logo-pink);
+            box-shadow: 0 4px 10px rgba(232, 62, 140, 0.1);
+        }
+
+        /* --- BUTTONS --- */
+        .btn-group {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 14px 25px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            border: none;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-prev {
+            background: rgba(255, 255, 255, 0.8);
+            color: var(--text-muted);
+            border: 1px solid #ddd;
+        }
+
+        .btn-prev:hover {
+            background: #eee;
+            color: var(--text-dark);
+        }
+
+        .btn-next {
+            background: var(--logo-pink);
+            color: white;
+            flex: 1;
+            box-shadow: 0 4px 15px rgba(232, 62, 140, 0.3);
+        }
+
+        .btn-next:hover {
+            background: #d12e7c;
+            transform: translateY(-2px);
+        }
+
+        .btn-submit {
+            background: #25D366; /* WhatsApp Green */
+            color: white;
+            flex: 1;
+            box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3);
+        }
+
+        .btn-submit:hover {
+            background: #1ebe5d;
+            transform: translateY(-2px);
+        }
+
+        /* --- SUMMARY REVIEW --- */
+        .summary-box {
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid rgba(232, 62, 140, 0.1);
+        }
+
+        .summary-item {
+            margin-bottom: 15px;
+            border-bottom: 1px dashed #ddd;
+            padding-bottom: 10px;
+        }
+
+        .summary-item:last-child {
+            margin-bottom: 0;
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .summary-item span {
+            display: block;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .summary-item strong {
+            font-size: 1rem;
+            color: var(--text-dark);
+        }
+
+        /* Mobile */
+        @media (max-width: 600px) {
+            .form-container {
+                padding: 25px 20px;
+            }
+            .step-label {
+                display: none; /* Hide labels on small screens to save space */
+            }
+            .options-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Top Navigation -->
+    <div class="top-nav">
+        <a href="index.html" class="back-btn">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+            Back
+        </a>
+        <div class="logo-icon-small">
+            <img src="https://img.sanishtech.com/u/3ab7c87c7e4d879b7da2c6245998ae10.jpg" alt="Logo">
+        </div>
+    </div>
+
+    <!-- Main Form Container -->
+    <div class="form-container">
+        
+        <div class="form-header">
+            <h2>Book a Caregiver</h2>
+            <p>Please provide a few details so we can assist you better.</p>
+        </div>
+
+        <!-- Progress Bar -->
+        <div class="progress-container">
+            <div class="progress-line"></div>
+            <div class="progress-line-fill" id="progressFill"></div>
+            
+            <div class="step-indicator active" data-step="1">
+                <div class="step-circle">1</div>
+                <div class="step-label">Details</div>
+            </div>
+            <div class="step-indicator" data-step="2">
+                <div class="step-circle">2</div>
+                <div class="step-label">Care Needs</div>
+            </div>
+            <div class="step-indicator" data-step="3">
+                <div class="step-circle">3</div>
+                <div class="step-label">Schedule</div>
+            </div>
+            <div class="step-indicator" data-step="4">
+                <div class="step-circle">4</div>
+                <div class="step-label">Review</div>
+            </div>
+        </div>
+
+        <form id="bookingForm">
+            
+            <!-- STEP 1: Personal Details -->
+            <div class="form-step active" id="step-1">
+                <div class="input-group">
+                    <label>Your Name</label>
+                    <input type="text" id="clientName" placeholder="e.g. John Doe" required>
+                </div>
+                <div class="input-group">
+                    <label>Phone Number</label>
+                    <input type="tel" id="clientPhone" placeholder="e.g. 082 123 4567" required>
+                </div>
+                <div class="input-group">
+                    <label>Who needs the care?</label>
+                    <select id="careRecipient">
+                        <option value="Myself">Myself</option>
+                        <option value="Parent">Parent</option>
+                        <option value="Spouse">Spouse</option>
+                        <option value="Other Family Member">Other Family Member</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- STEP 2: Care Needs -->
+            <div class="form-step" id="step-2">
+                <div class="input-group">
+                    <label>Select the type of care needed</label>
+                    <div class="options-grid">
+                        <label class="option-card" onclick="selectOption(this)">
+                            <input type="radio" name="careType" value="Personal Care" required>
+                            Personal Care
+                        </label>
+                        <label class="option-card" onclick="selectOption(this)">
+                            <input type="radio" name="careType" value="Medication Assistance">
+                            Medication Assistance
+                        </label>
+                        <label class="option-card" onclick="selectOption(this)">
+                            <input type="radio" name="careType" value="Vitals & Monitoring">
+                            Vitals & Monitoring
+                        </label>
+                        <label class="option-card" onclick="selectOption(this)">
+                            <input type="radio" name="careType" value="Home Based Care">
+                            Home Based Care
+                        </label>
+                        <label class="option-card" onclick="selectOption(this)">
+                            <input type="radio" name="careType" value="Support & Dignity">
+                            Support & Dignity
+                        </label>
+                        <label class="option-card" onclick="selectOption(this)">
+                            <input type="radio" name="careType" value="Other">
+                            Other
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- STEP 3: Schedule -->
+            <div class="form-step" id="step-3">
+                <div class="input-group">
+                    <label>When do you need care to start?</label>
+                    <input type="date" id="startDate" required>
+                </div>
+                <div class="input-group">
+                    <label>Preferred Shift</label>
+                    <select id="shiftTime">
+                        <option value="Morning (6am - 12pm)">Morning (6am - 12pm)</option>
+                        <option value="Afternoon (12pm - 6pm)">Afternoon (12pm - 6pm)</option>
+                        <option value="Evening (6pm - 8pm)">Evening (6pm - 8pm)</option>
+                        <option value="Night Care (Emergency)">Night Care (Emergency)</option>
+                        <option value="Full Day">Full Day</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>Any specific requirements or notes? (Optional)</label>
+                    <textarea id="notes" rows="3" placeholder="e.g. Needs assistance walking, dietary requirements..."></textarea>
+                </div>
+            </div>
+
+            <!-- STEP 4: Review & Submit -->
+            <div class="form-step" id="step-4">
+                <div class="summary-box">
+                    <div class="summary-item">
+                        <span>Client Name</span>
+                        <strong id="sumName"></strong>
+                    </div>
+                    <div class="summary-item">
+                        <span>Phone</span>
+                        <strong id="sumPhone"></strong>
+                    </div>
+                    <div class="summary-item">
+                        <span>Care For</span>
+                        <strong id="sumRecipient"></strong>
+                    </div>
+                    <div class="summary-item">
+                        <span>Care Type</span>
+                        <strong id="sumType"></strong>
+                    </div>
+                    <div class="summary-item">
+                        <span>Start Date</span>
+                        <strong id="sumDate"></strong>
+                    </div>
+                    <div class="summary-item">
+                        <span>Shift</span>
+                        <strong id="sumShift"></strong>
+                    </div>
+                </div>
+                <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 15px; text-align: center;">
+                    Clicking "Send via WhatsApp" will open WhatsApp with your request pre-filled. We will then confirm your booking.
+                </p>
+            </div>
+
+            <!-- Buttons -->
+            <div class="btn-group">
+                <button type="button" class="btn btn-prev" id="prevBtn" style="display: none;">Back</button>
+                <button type="button" class="btn btn-next" id="nextBtn">Next Step</button>
+                <button type="submit" class="btn btn-submit" id="submitBtn" style="display: none;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
+                    Send via WhatsApp
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Javascript for Form Logic -->
+    <script>
+        let currentStep = 1;
+        const totalSteps = 4;
+        
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const submitBtn = document.getElementById('submitBtn');
+        const progressFill = document.getElementById('progressFill');
+        const stepIndicators = document.querySelectorAll('.step-indicator');
+        const formSteps = document.querySelectorAll('.form-step');
+
+        // Handle Option Card Selection
+        function selectOption(card) {
+            // Remove selected class from all cards in the same group
+            const parent = card.parentElement;
+            const cards = parent.querySelectorAll('.option-card');
+            cards.forEach(c => c.classList.remove('selected'));
+            
+            // Add selected class to clicked card
+            card.classList.add('selected');
+            
+            // Ensure radio is checked
+            const radio = card.querySelector('input[type="radio"]');
+            if (radio) radio.checked = true;
+        }
+
+        // Update UI based on current step
+        function updateStep() {
+            // Update buttons
+            if (currentStep === 1) {
+                prevBtn.style.display = 'none';
+            } else {
+                prevBtn.style.display = 'block';
+            }
+
+            if (currentStep === totalSteps) {
+                nextBtn.style.display = 'none';
+                submitBtn.style.display = 'flex';
+                populateSummary();
+            } else {
+                nextBtn.style.display = 'flex';
+                submitBtn.style.display = 'none';
+            }
+
+            // Update Progress Bar
+            const progressPercentage = ((currentStep - 1) / (totalSteps - 1)) * 100;
+            progressFill.style.width = `${progressPercentage}%`;
+
+            // Update Step Indicators
+            stepIndicators.forEach((indicator, index) => {
+                if (index + 1 < currentStep) {
+                    indicator.classList.add('completed');
+                    indicator.classList.remove('active');
+                } else if (index + 1 === currentStep) {
+                    indicator.classList.add('active');
+                    indicator.classList.remove('completed');
+                } else {
+                    indicator.classList.remove('active', 'completed');
+                }
+            });
+
+            // Show/Hide Form Steps
+            formSteps.forEach((step, index) => {
+                if (index + 1 === currentStep) {
+                    step.classList.add('active');
+                } else {
+                    step.classList.remove('active');
+                }
+            });
+        }
+
+        // Next Button Click
+        nextBtn.addEventListener('click', () => {
+            // Basic HTML5 Validation for required fields in current step
+            const currentStepDiv = document.getElementById(`step-${currentStep}`);
+            const inputs = currentStepDiv.querySelectorAll('input[required], select[required]');
+            let isValid = true;
+
+            inputs.forEach(input => {
+                if (!input.value) {
+                    isValid = false;
+                    input.style.borderColor = 'red';
+                } else {
+                    input.style.borderColor = 'rgba(232, 62, 140, 0.2)';
+                }
+            });
+
+            // Special validation for radio buttons
+            if (currentStep === 2) {
+                const radioChecked = currentStepDiv.querySelector('input[name="careType"]:checked');
+                if (!radioChecked) {
+                    isValid = false;
+                    alert("Please select a care type.");
+                }
+            }
+
+            if (isValid && currentStep < totalSteps) {
+                currentStep++;
+                updateStep();
+            }
+        });
+
+        // Previous Button Click
+        prevBtn.addEventListener('click', () => {
+            if (currentStep > 1) {
+                currentStep--;
+                updateStep();
+            }
+        });
+
+        // Populate Summary on Step 4
+        function populateSummary() {
+            document.getElementById('sumName').textContent = document.getElementById('clientName').value;
+            document.getElementById('sumPhone').textContent = document.getElementById('clientPhone').value;
+            document.getElementById('sumRecipient').textContent = document.getElementById('careRecipient').value;
+            
+            const selectedType = document.querySelector('input[name="careType"]:checked');
+            document.getElementById('sumType').textContent = selectedType ? selectedType.value : 'Not selected';
+            
+            // Format Date
+            const dateVal = document.getElementById('startDate').value;
+            const formattedDate = dateVal ? new Date(dateVal).toLocaleDateString('en-ZA', { year: 'numeric', month: 'long', day: 'numeric' }) : 'Not selected';
+            document.getElementById('sumDate').textContent = formattedDate;
+            
+            document.getElementById('sumShift').textContent = document.getElementById('shiftTime').value;
+        }
+
+        // Handle Form Submission (Send to WhatsApp)
+        document.getElementById('bookingForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            // Gather data
+            const name = document.getElementById('clientName').value;
+            const phone = document.getElementById('clientPhone').value;
+            const recipient = document.getElementById('careRecipient').value;
+            const careType = document.querySelector('input[name="careType"]:checked').value;
+            const date = document.getElementById('startDate').value;
+            const shift = document.getElementById('shiftTime').value;
+            const notes = document.getElementById('notes').value || "None";
+
+            // Construct WhatsApp Message
+            const waNumber = "27747416029"; // Your number
+            let message = `*NEW BOOKING REQUEST*%0A%0A`;
+            message += `*Name:* ${name}%0A`;
+            message += `*Phone:* ${phone}%0A`;
+            message += `*Care For:* ${recipient}%0A`;
+            message += `*Care Needed:* ${careType}%0A`;
+            message += `*Start Date:* ${date}%0A`;
+            message += `*Shift:* ${shift}%0A`;
+            message += `*Notes:* ${notes}%0A%0A`;
+            message += `Please confirm my booking. Thank you!`;
+
+            // Open WhatsApp
+            window.open(`https://wa.me/${waNumber}?text=${message}`, '_blank');
+        });
+
+        // Initialize
+        updateStep();
+    </script>
+</body>
+  </html>
